@@ -1,31 +1,33 @@
+const search = document.querySelector('[type]');
 const ul = document.querySelector('ul');
-const arr1 = ['Dace', 'Matt', 'Maddy', 'Scott', 'Phil', 'Zane', 'Jamie'];
-const search = document.querySelector('[type]')
-let targetFriendList = '';
+const friendList = ['Dace', 'Matt', 'Maddy', 'Scott', 'Phil', 'Zane', 'Jamie'];
 
-// create a function that takes items from first array and then shifts them into the second array based on search criteria
-
-// let input = prompt('What names should come through into the second array?')
-
-
-function newResults(list, input) {
-	let newArray = [];
-	targetFriendList = '';
-	input = input.toLowerCase();
+// this function will take two arguments and return new results into an Array
+const filterResults = (list, inputSource) => {
+    let newArray = [];
+    inputSource = inputSource.value.toLowerCase();
 	for (i=0; i < list.length; i++){
-		if (list[i].toLowerCase().indexOf(input) > -1) {
+		if (list[i].toLowerCase().indexOf(inputSource) > -1) {
 			newArray.push(list[i]);
 		}
 	}
-	for (i=0; i < newArray.length; i++) {
-		targetFriendList += `<li>${newArray[i]}</li>`
-	}
-	return targetFriendList;
+	return newArray;
 }
 
+// function that will append the list to the page
+const insertList = (list, target) => {
+    target.innerHTML = '';
+    let listHTML = '';
+    for (i=0; i < list.length; i++) {
+        listHTML += `<li>${list[i]}</li>`
+    }
+    target.insertAdjacentHTML('beforeend', listHTML);
+}
+
+// Page load results
+insertList(filterResults(friendList, search), ul);
+
+// Event listener for search
 search.addEventListener('keyup', () => {
-	ul.innerHTML = '';
-	input = search.value;
-	newResults(arr1, input);
-	ul.insertAdjacentHTML('beforeend', targetFriendList);
-})
+	insertList(filterResults(friendList, search), ul);
+});
